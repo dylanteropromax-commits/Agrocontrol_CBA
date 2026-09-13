@@ -22,5 +22,13 @@
         "cantidad": 20,
         "motivo": "Compra",
         "fecha": "12/09/2026"
+    },
+    {
+        "id": "M0004",
+        "producto_codigo": "P001",
+        "tipo": "VENTA",
+        "cantidad": 3,
+        "motivo": "Venta directa en caja",
+        "fecha": "12/09/2026"
     }
 ]

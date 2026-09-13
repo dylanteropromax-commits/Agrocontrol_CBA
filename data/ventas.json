@@ -1,1 +1,15 @@
-[]
+[
+    {
+        "id": "V0001",
+        "fecha": "12/09/2026",
+        "items": [
+            {
+                "codigo": "P001",
+                "cantidad": 3,
+                "precio_unitario": 3500.0,
+                "subtotal": 10500.0
+            }
+        ],
+        "total": 10500.0
+    }
+]
