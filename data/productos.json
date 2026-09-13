@@ -1,0 +1,11 @@
+[
+    {
+        "codigo": "P001",
+        "nombre": "Lechuga crespa",
+        "categoria": "Hortalizas",
+        "unidad": "unidad",
+        "precio": 3500.0,
+        "stock_minimo": 10,
+        "activo": true
+    }
+]
