@@ -30,5 +30,21 @@
         "cantidad": 3,
         "motivo": "Venta directa en caja",
         "fecha": "12/09/2026"
+    },
+    {
+        "id": "M0005",
+        "producto_codigo": "P002",
+        "tipo": "ENTRADA",
+        "cantidad": 200,
+        "motivo": "Cosecha lote L002",
+        "fecha": "12/09/2026"
+    },
+    {
+        "id": "M0006",
+        "producto_codigo": "P002",
+        "tipo": "VENTA",
+        "cantidad": 10,
+        "motivo": "Venta directa en caja",
+        "fecha": "12/09/2026"
     }
 ]

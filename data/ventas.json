@@ -11,5 +11,18 @@
             }
         ],
         "total": 10500.0
+    },
+    {
+        "id": "V0002",
+        "fecha": "12/09/2026",
+        "items": [
+            {
+                "codigo": "P002",
+                "cantidad": 10,
+                "precio_unitario": 5000.0,
+                "subtotal": 50000.0
+            }
+        ],
+        "total": 50000.0
     }
 ]

@@ -6,5 +6,21 @@
         "area_m2": 120.5,
         "cantidad_producida": 50,
         "estado": "COSECHADO"
+    },
+    {
+        "id_lote": "L002",
+        "producto_codigo": "P002",
+        "fecha_siembra": "12/09/2026",
+        "area_m2": 100.0,
+        "cantidad_producida": 200,
+        "estado": "COSECHADO"
+    },
+    {
+        "id_lote": "L003",
+        "producto_codigo": "P003",
+        "fecha_siembra": "11/09/2026",
+        "area_m2": 300.1,
+        "cantidad_producida": 0,
+        "estado": "EN_PRODUCCION"
     }
 ]

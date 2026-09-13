@@ -7,5 +7,23 @@
         "precio": 3500.0,
         "stock_minimo": 10,
         "activo": true
+    },
+    {
+        "codigo": "P002",
+        "nombre": "Tomate chonto",
+        "categoria": "verduras",
+        "unidad": "kg",
+        "precio": 5000.0,
+        "stock_minimo": 30,
+        "activo": true
+    },
+    {
+        "codigo": "P003",
+        "nombre": "Maiz",
+        "categoria": "Agricola",
+        "unidad": "Kg",
+        "precio": 7000.0,
+        "stock_minimo": 2000,
+        "activo": true
     }
 ]
