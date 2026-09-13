@@ -1,1 +1,10 @@
-[]
+[
+    {
+        "id": "M0001",
+        "producto_codigo": "P001",
+        "tipo": "ENTRADA",
+        "cantidad": 50,
+        "motivo": "Cosecha lote L001",
+        "fecha": "12/09/2026"
+    }
+]

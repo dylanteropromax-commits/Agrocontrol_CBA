@@ -2,6 +2,7 @@ import json
 from datetime import datetime
 from pathlib import Path
 
+# --- 1. PERSISTENCIA Y CONFIGURACIÓN JSON ---
 DATA_DIR = Path("data")
 DATA_DIR.mkdir(exist_ok=True) 
 
@@ -27,6 +28,8 @@ def guardar_datos():
         with open(ruta, "w", encoding="utf-8") as f:
             json.dump(datos[clave], f, indent=4)
 
+
+# --- 2. FUNCIONES AUXILIARES ---
 def fmt_dinero(valor):
     return f"${int(valor)}"
 
@@ -45,7 +48,6 @@ def generar_id(coleccion, prefijo):
     return f"{prefijo}{numero:04d}"
 
 def calcular_stock(codigo):
-    """Calcula el stock dinámicamente sumando entradas y restando salidas/ventas según las reglas de negocio."""
     stock = 0
     for mov in datos["movimientos"]:
         if mov["producto_codigo"] == codigo:
@@ -56,79 +58,171 @@ def calcular_stock(codigo):
     return stock
 
 
+# --- 3. MÓDULOS DE NEGOCIO ---
+
+# (LO QUE YA HICIMOS: PRODUCTOS)
 def gestion_productos():
     print("\n--- REGISTRAR NUEVO PRODUCTO ---")
     codigo = input("Código del producto (Ej: P001): ").strip().upper()
-    
     if any(p["codigo"] == codigo for p in datos["productos"]):
         print("Error: Ya existe un producto con este código.")
         return
-
     nombre = input("Nombre del producto: ").strip()
     categoria = input("Categoría: ").strip()
-    unidad = input("Unidad de medida (Ej: kg, unidad): ").strip()
+    unidad = input("Unidad de medida: ").strip()
     
     while True:
         try:
             precio = float(input("Precio de venta: "))
             stock_min = int(input("Stock mínimo para alertas: "))
-            if precio > 0 and stock_min >= 0:
-                break
-            print("Error: El precio debe ser > 0 y el stock mínimo >= 0.")
+            if precio > 0 and stock_min >= 0: break
+            print("Error: Precio > 0 y stock mínimo >= 0.")
         except ValueError:
-            print("Error: Ingrese valores numéricos válidos.")
+            print("Error: Ingrese valores numéricos.")
 
     producto = {
-        "codigo": codigo,
-        "nombre": nombre,
-        "categoria": categoria,
-        "unidad": unidad,
-        "precio": precio,
-        "stock_minimo": stock_min,
-        "activo": True
+        "codigo": codigo, "nombre": nombre, "categoria": categoria,
+        "unidad": unidad, "precio": precio, "stock_minimo": stock_min, "activo": True
     }
-    
     datos["productos"].append(producto)
     guardar_datos() 
-    print(f"Producto '{nombre}' registrado y guardado con éxito.")
+    print(f"Producto registrado con éxito.")
 
 def listar_productos():
     print("\n--- LISTA DE PRODUCTOS ACTIVOS ---")
     print(f"{'CÓDIGO':<8} | {'NOMBRE':<20} | {'PRECIO':<10} | {'STOCK MIN':<10} | {'STOCK ACTUAL':<12}")
     print("-" * 73)
-    
-    hay_productos = False
     for p in datos["productos"]:
         if p["activo"]:
-            hay_productos = True
             stock_actual = calcular_stock(p["codigo"])
             print(f"{p['codigo']:<8} | {p['nombre']:<20} | {fmt_dinero(p['precio']):<10} | {p['stock_minimo']:<10} | {stock_actual:<12}")
-    
-    if not hay_productos:
-        print("No hay productos registrados o activos.")
     print("-" * 73)
 
 
+# (NUEVO PASO: LOTES PRODUCTIVOS)
+def registrar_lote():
+    print("\n--- REGISTRAR LOTE PRODUCTIVO ---")
+    cod_prod = input("Código del producto a cultivar (Ej: P001): ").strip().upper()
+    
+    # Valida que el producto exista y esté activo
+    if not any(p["codigo"] == cod_prod and p["activo"] for p in datos["productos"]):
+        print("Error: El producto no existe o está inactivo.")
+        return
+        
+    id_lote = input("ID del Lote (Ej: L001): ").strip().upper()
+    
+    # Valida que el lote no se repita
+    if any(l["id_lote"] == id_lote for l in datos["lotes"]):
+        print("Error: Ya existe un lote con este ID.")
+        return
+        
+    fecha = input("Fecha de siembra (dd/mm/yyyy): ").strip()
+    if not validar_fecha(fecha):
+        print("Error: Formato de fecha incorrecto.")
+        return
+    
+    try:
+        area = float(input("Área en m2: "))
+    except ValueError:
+        print("Error: Área inválida.")
+        return
+
+    lote = {
+        "id_lote": id_lote, "producto_codigo": cod_prod, "fecha_siembra": fecha,
+        "area_m2": area, "cantidad_producida": 0, "estado": "EN_PRODUCCION"
+    }
+    datos["lotes"].append(lote)
+    guardar_datos()
+    print("Lote registrado con éxito.")
+
+def cosechar_lote():
+    print("\n--- COSECHAR LOTE ---")
+    id_lote = input("ID del lote a cosechar: ").strip().upper()
+    
+    # Busca el lote en la lista
+    lote = next((l for l in datos["lotes"] if l["id_lote"] == id_lote), None)
+    
+    if not lote:
+        print("Error: El lote ingresado no existe.")
+        return
+        
+    if lote["estado"] != "EN_PRODUCCION":
+        print(f"Error: El lote ya fue cosechado o cancelado.")
+        return
+
+    try:
+        cantidad = int(input("Cantidad producida: "))
+        if cantidad <= 0:
+            print("Error: La cantidad debe ser mayor a 0.")
+            return
+    except ValueError:
+        print("Error: Ingrese un número válido.")
+        return
+
+    # Obtenemos la fecha actual en el formato solicitado
+    fecha_hoy = datetime.now().strftime("%d/%m/%Y")
+    
+    # Cambiamos el estado del lote y guardamos la cantidad
+    lote["estado"] = "COSECHADO"
+    lote["cantidad_producida"] = cantidad
+
+    # Generamos la entrada automática al inventario
+    movimiento = {
+        "id": generar_id("movimientos", "M"), 
+        "producto_codigo": lote["producto_codigo"],
+        "tipo": "ENTRADA", 
+        "cantidad": cantidad, 
+        "motivo": f"Cosecha lote {id_lote}", 
+        "fecha": fecha_hoy
+    }
+    datos["movimientos"].append(movimiento)
+    guardar_datos()
+    print("¡Cosecha registrada! Se ha actualizado el inventario automáticamente.")
+
+
+# --- 4. SUBMENÚS Y MENÚ PRINCIPAL ---
+def menu_productos():
+    print("\n1. Registrar producto\n2. Listar productos activos")
+    op = input("Opción: ")
+    if op == "1": gestion_productos()
+    elif op == "2": listar_productos()
+
+def menu_lotes():
+    print("\n1. Registrar lote\n2. Cosechar lote")
+    op = input("Opción: ")
+    if op == "1": registrar_lote()
+    elif op == "2": cosechar_lote()
 
 def menu():
     cargar_datos() 
     
     while True:
-        print("\n==== AGROCONTROL CBA ====")
-        print("1. Registrar producto")
-        print("2. Listar productos")
+        print("\n==================== AGROCONTROL CBA ====================")
+        print("1. Gestión de productos")
+        print("2. Gestión de lotes productivos")
+        print("3. Movimientos de inventario (Próximo paso)")
+        print("4. Registrar venta (Próximo paso)")
+        print("5. Consultar ventas (Próximo paso)")
+        print("6. Alertas de stock (Próximo paso)")
+        print("7. Reportes (Próximo paso)")
+        print("8. Guardar datos")
         print("0. Salir")
         
         op = input("Seleccione una opción: ")
         
         if op == "1":
-            gestion_productos()
+            menu_productos()
         elif op == "2":
-            listar_productos()
+            menu_lotes()
+        elif op == "8":
+            guardar_datos()
+            print("Datos guardados manualmente con éxito.")
         elif op == "0":
             print("Saliendo del sistema...")
             guardar_datos()
             break
+        elif op in ["3", "4", "5", "6", "7"]:
+            print("Esta función la haremos en el siguiente paso.")
         else:
             print("Opción inválida. Intente de nuevo.")
 
