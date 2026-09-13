@@ -60,7 +60,7 @@ def calcular_stock(codigo):
 
 # --- 3. MÓDULOS DE NEGOCIO ---
 
-# (LO QUE YA HICIMOS: PRODUCTOS)
+# Productos
 def gestion_productos():
     print("\n--- REGISTRAR NUEVO PRODUCTO ---")
     codigo = input("Código del producto (Ej: P001): ").strip().upper()
@@ -98,20 +98,15 @@ def listar_productos():
             print(f"{p['codigo']:<8} | {p['nombre']:<20} | {fmt_dinero(p['precio']):<10} | {p['stock_minimo']:<10} | {stock_actual:<12}")
     print("-" * 73)
 
-
-# (NUEVO PASO: LOTES PRODUCTIVOS)
+# Lotes
 def registrar_lote():
     print("\n--- REGISTRAR LOTE PRODUCTIVO ---")
     cod_prod = input("Código del producto a cultivar (Ej: P001): ").strip().upper()
-    
-    # Valida que el producto exista y esté activo
     if not any(p["codigo"] == cod_prod and p["activo"] for p in datos["productos"]):
         print("Error: El producto no existe o está inactivo.")
         return
         
     id_lote = input("ID del Lote (Ej: L001): ").strip().upper()
-    
-    # Valida que el lote no se repita
     if any(l["id_lote"] == id_lote for l in datos["lotes"]):
         print("Error: Ya existe un lote con este ID.")
         return
@@ -138,14 +133,11 @@ def registrar_lote():
 def cosechar_lote():
     print("\n--- COSECHAR LOTE ---")
     id_lote = input("ID del lote a cosechar: ").strip().upper()
-    
-    # Busca el lote en la lista
     lote = next((l for l in datos["lotes"] if l["id_lote"] == id_lote), None)
     
     if not lote:
         print("Error: El lote ingresado no existe.")
         return
-        
     if lote["estado"] != "EN_PRODUCCION":
         print(f"Error: El lote ya fue cosechado o cancelado.")
         return
@@ -159,25 +151,72 @@ def cosechar_lote():
         print("Error: Ingrese un número válido.")
         return
 
-    # Obtenemos la fecha actual en el formato solicitado
     fecha_hoy = datetime.now().strftime("%d/%m/%Y")
-    
-    # Cambiamos el estado del lote y guardamos la cantidad
     lote["estado"] = "COSECHADO"
     lote["cantidad_producida"] = cantidad
 
-    # Generamos la entrada automática al inventario
     movimiento = {
-        "id": generar_id("movimientos", "M"), 
-        "producto_codigo": lote["producto_codigo"],
-        "tipo": "ENTRADA", 
-        "cantidad": cantidad, 
-        "motivo": f"Cosecha lote {id_lote}", 
-        "fecha": fecha_hoy
+        "id": generar_id("movimientos", "M"), "producto_codigo": lote["producto_codigo"],
+        "tipo": "ENTRADA", "cantidad": cantidad, "motivo": f"Cosecha lote {id_lote}", "fecha": fecha_hoy
     }
     datos["movimientos"].append(movimiento)
     guardar_datos()
     print("¡Cosecha registrada! Se ha actualizado el inventario automáticamente.")
+
+
+# (NUEVO PASO: MOVIMIENTOS MANUALES)
+def registrar_movimiento():
+    print("\n--- MOVIMIENTO MANUAL DE INVENTARIO ---")
+    listar_productos()
+    
+    cod = input("\nCódigo del producto: ").strip().upper()
+    if not any(p["codigo"] == cod and p["activo"] for p in datos["productos"]):
+        print("Error: El producto no existe o está inactivo.")
+        return
+
+    tipo_op = input("Tipo de movimiento - (1) ENTRADA, (2) SALIDA: ").strip()
+    if tipo_op not in ["1", "2"]:
+        print("Error: Opción de movimiento no válida.")
+        return
+
+    try:
+        cantidad = int(input("Cantidad: "))
+        if cantidad <= 0:
+            print("Error: La cantidad debe ser mayor a 0.")
+            return
+    except ValueError:
+        print("Error: Ingrese un valor numérico válido.")
+        return
+
+    # Si es salida, validamos que haya suficiente stock (Prueba PF005)
+    if tipo_op == "2":
+        stock_actual = calcular_stock(cod)
+        if cantidad > stock_actual:
+            print(f"Error: Stock insuficiente. Stock actual: {stock_actual}, Intentó retirar: {cantidad}.")
+            return
+        tipo_str = "SALIDA"
+    else:
+        tipo_str = "ENTRADA"
+
+    motivo = input("Motivo obligatorio del movimiento: ").strip()
+    if not motivo:
+        print("Error: El motivo es obligatorio.")
+        return
+
+    fecha_hoy = datetime.now().strftime("%d/%m/%Y")
+    
+    movimiento = {
+        "id": generar_id("movimientos", "M"),
+        "producto_codigo": cod,
+        "tipo": tipo_str,
+        "cantidad": cantidad,
+        "motivo": motivo,
+        "fecha": fecha_hoy
+    }
+    
+    datos["movimientos"].append(movimiento)
+    guardar_datos()
+    print(f"Movimiento de {tipo_str} registrado con éxito.")
 
 
 # --- 4. SUBMENÚS Y MENÚ PRINCIPAL ---
@@ -200,7 +239,7 @@ def menu():
         print("\n==================== AGROCONTROL CBA ====================")
         print("1. Gestión de productos")
         print("2. Gestión de lotes productivos")
-        print("3. Movimientos de inventario (Próximo paso)")
+        print("3. Movimientos de inventario")
         print("4. Registrar venta (Próximo paso)")
         print("5. Consultar ventas (Próximo paso)")
         print("6. Alertas de stock (Próximo paso)")
@@ -214,6 +253,8 @@ def menu():
             menu_productos()
         elif op == "2":
             menu_lotes()
+        elif op == "3":
+            registrar_movimiento()
         elif op == "8":
             guardar_datos()
             print("Datos guardados manualmente con éxito.")
@@ -221,7 +262,7 @@ def menu():
             print("Saliendo del sistema...")
             guardar_datos()
             break
-        elif op in ["3", "4", "5", "6", "7"]:
+        elif op in ["4", "5", "6", "7"]:
             print("Esta función la haremos en el siguiente paso.")
         else:
             print("Opción inválida. Intente de nuevo.")

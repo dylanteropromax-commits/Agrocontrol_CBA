@@ -6,5 +6,21 @@
         "cantidad": 50,
         "motivo": "Cosecha lote L001",
         "fecha": "12/09/2026"
+    },
+    {
+        "id": "M0002",
+        "producto_codigo": "P001",
+        "tipo": "ENTRADA",
+        "cantidad": 20,
+        "motivo": "compra",
+        "fecha": "12/09/2026"
+    },
+    {
+        "id": "M0003",
+        "producto_codigo": "P001",
+        "tipo": "SALIDA",
+        "cantidad": 20,
+        "motivo": "Compra",
+        "fecha": "12/09/2026"
     }
 ]
