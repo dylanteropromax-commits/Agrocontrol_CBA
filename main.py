@@ -487,29 +487,36 @@ def registrar_venta():
 
 def consultar_ventas():
     print("\n--- 5. CONSULTAR VENTAS ---")
-    
+
     if not datos["ventas"]:
         print("No hay ventas registradas en el sistema.")
         return
 
-    print(f"Se encontraron {len(datos['ventas'])} venta(s) registrada(s).\n")
-    
-    for venta in datos["ventas"]:
+    filtro = input("¿Desea filtrar por fecha? (DD/MM/YYYY) o presione Enter para ver todas: ").strip()
+    ventas_filtradas = [v for v in datos["ventas"] if v.get("fecha") == filtro] if filtro else datos["ventas"]
+
+    if not ventas_filtradas:
+        print(f"No se encontraron ventas para la fecha '{filtro}'.")
+        return
+
+    print(f"\nSe encontraron {len(ventas_filtradas)} venta(s) registrada(s).\n")
+
+    for venta in ventas_filtradas:
         print("=" * 50)
         print(f"ID Factura : {venta.get('id', 'N/A')}")
         print(f"Fecha      : {venta.get('fecha', 'N/A')}")
         print("-" * 50)
         print(f"{'CÓDIGO':<8} | {'CANTIDAD':<10} | {'P. UNIT':<10} | {'SUBTOTAL':<10}")
         print("-" * 50)
-        
+
         items = venta.get("items", [])
-        
+
         if items:
             for item in items:
-                print(f"{item.get('codigo', 'N/A'):<8} | {item.get('cantidad', 0):<10} | {fmt_dinero(item.get('precio_unitario', 0)):<10} | {fmt_dinero(item.get('subtotal', 0)):<10}")
+                print(f"{item.get('codigo', 'N/A'):<8} | {item.get('cantidad', 0):<10} | {fmt_dinero(item.get('precio_unitario', 0)):<10} | {fmt_dinero(item.get('subtotal', 0))}")
         else:
             print("Esta venta no contiene detalle de productos.")
-            
+
         print("-" * 50)
         print(f"TOTAL VENTA: {fmt_dinero(venta.get('total', 0))}")
         print("=" * 50)
