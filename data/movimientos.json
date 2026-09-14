@@ -46,5 +46,29 @@
         "cantidad": 10,
         "motivo": "Venta directa en caja",
         "fecha": "12/09/2026"
+    },
+    {
+        "id": "M0007",
+        "producto_codigo": "P004",
+        "tipo": "ENTRADA",
+        "cantidad": 150,
+        "motivo": "Cosecha lote L004",
+        "fecha": "14/09/2026 14:34"
+    },
+    {
+        "id": "M0008",
+        "producto_codigo": "P004",
+        "tipo": "VENTA",
+        "cantidad": 31,
+        "motivo": "Venta directa en caja",
+        "fecha": "14/09/2026 14:34"
+    },
+    {
+        "id": "M0009",
+        "producto_codigo": "P002",
+        "tipo": "VENTA",
+        "cantidad": 23,
+        "motivo": "Venta directa en caja",
+        "fecha": "14/09/2026 14:40"
     }
 ]

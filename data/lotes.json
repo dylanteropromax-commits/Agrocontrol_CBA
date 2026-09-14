@@ -22,5 +22,13 @@
         "area_m2": 300.1,
         "cantidad_producida": 0,
         "estado": "EN_PRODUCCION"
+    },
+    {
+        "id_lote": "L004",
+        "producto_codigo": "P004",
+        "fecha_siembra": "14/09/2026",
+        "area_m2": 111.3,
+        "cantidad_producida": 150,
+        "estado": "COSECHADO"
     }
 ]

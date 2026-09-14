@@ -487,7 +487,32 @@ def registrar_venta():
 
 def consultar_ventas():
     print("\n--- 5. CONSULTAR VENTAS ---")
-  
+    
+    if not datos["ventas"]:
+        print("No hay ventas registradas en el sistema.")
+        return
+
+    print(f"Se encontraron {len(datos['ventas'])} venta(s) registrada(s).\n")
+    
+    for venta in datos["ventas"]:
+        print("=" * 50)
+        print(f"ID Factura : {venta.get('id', 'N/A')}")
+        print(f"Fecha      : {venta.get('fecha', 'N/A')}")
+        print("-" * 50)
+        print(f"{'CÓDIGO':<8} | {'CANTIDAD':<10} | {'P. UNIT':<10} | {'SUBTOTAL':<10}")
+        print("-" * 50)
+        
+        items = venta.get("items", [])
+        
+        if items:
+            for item in items:
+                print(f"{item.get('codigo', 'N/A'):<8} | {item.get('cantidad', 0):<10} | {fmt_dinero(item.get('precio_unitario', 0)):<10} | {fmt_dinero(item.get('subtotal', 0)):<10}")
+        else:
+            print("Esta venta no contiene detalle de productos.")
+            
+        print("-" * 50)
+        print(f"TOTAL VENTA: {fmt_dinero(venta.get('total', 0))}")
+        print("=" * 50)
 
 def alertas_stock():
     print("\n--- 6. ALERTAS DE STOCK ---")

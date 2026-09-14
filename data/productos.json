@@ -25,5 +25,14 @@
         "precio": 7000.0,
         "stock_minimo": 2000,
         "activo": true
+    },
+    {
+        "codigo": "P004",
+        "nombre": "Arroz",
+        "categoria": "Agricola",
+        "unidad": "kg",
+        "precio": 2500.0,
+        "stock_minimo": 50,
+        "activo": true
     }
 ]
