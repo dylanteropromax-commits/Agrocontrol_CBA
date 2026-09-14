@@ -70,5 +70,45 @@
         "cantidad": 23,
         "motivo": "Venta directa en caja",
         "fecha": "14/09/2026 14:40"
+    },
+    {
+        "id": "M0010",
+        "producto_codigo": "P001",
+        "tipo": "VENTA",
+        "cantidad": 20,
+        "motivo": "Venta directa en caja",
+        "fecha": "14/09/2026 14:54"
+    },
+    {
+        "id": "M0011",
+        "producto_codigo": "P001",
+        "tipo": "VENTA",
+        "cantidad": 2,
+        "motivo": "Venta directa en caja",
+        "fecha": "14/09/2026 15:05"
+    },
+    {
+        "id": "M0012",
+        "producto_codigo": "P002",
+        "tipo": "VENTA",
+        "cantidad": 3,
+        "motivo": "Venta directa en caja",
+        "fecha": "14/09/2026 15:05"
+    },
+    {
+        "id": "M0013",
+        "producto_codigo": "P001",
+        "tipo": "VENTA",
+        "cantidad": 11,
+        "motivo": "Venta directa en caja",
+        "fecha": "14/09/2026 15:55"
+    },
+    {
+        "id": "M0014",
+        "producto_codigo": "P002",
+        "tipo": "VENTA",
+        "cantidad": 30,
+        "motivo": "Venta directa en caja",
+        "fecha": "14/09/2026 15:55"
     }
 ]

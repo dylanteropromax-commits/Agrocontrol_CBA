@@ -516,7 +516,23 @@ def consultar_ventas():
 
 def alertas_stock():
     print("\n--- 6. ALERTAS DE STOCK ---")
-   
+    print(f"{'CÓDIGO':<8} | {'NOMBRE':<20} | {'STOCK ACTUAL':<12} | {'STOCK MÍNIMO'}")
+    print("-" * 60)
+    
+    alertas_encontradas = 0
+    
+    for p in datos["productos"]:
+        if p["activo"]:
+            stock_actual = calcular_stock(p["codigo"])
+            
+            if stock_actual <= p["stock_minimo"]:
+                print(f"{p['codigo']:<8} | {p['nombre']:<20} | {stock_actual:<12} | {p['stock_minimo']}")
+                alertas_encontradas += 1
+                
+    print("-" * 60)
+    
+    if alertas_encontradas == 0:
+        print("El inventario está estable. Ningún producto está por debajo del stock mínimo.")
 
 def reportes():
     print("\n--- 7. REPORTES ---")

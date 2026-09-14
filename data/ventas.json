@@ -24,5 +24,56 @@
             }
         ],
         "total": 115000.0
+    },
+    {
+        "id": "V0003",
+        "fecha": "14/09/2026",
+        "items": [
+            {
+                "codigo": "P001",
+                "cantidad": 20,
+                "precio_unitario": 3500.0,
+                "subtotal": 70000.0
+            }
+        ],
+        "total": 70000.0
+    },
+    {
+        "id": "V0004",
+        "fecha": "14/09/2026",
+        "items": [
+            {
+                "codigo": "P001",
+                "cantidad": 2,
+                "precio_unitario": 3500.0,
+                "subtotal": 7000.0
+            },
+            {
+                "codigo": "P002",
+                "cantidad": 3,
+                "precio_unitario": 5000.0,
+                "subtotal": 15000.0
+            }
+        ],
+        "total": 22000.0
+    },
+    {
+        "id": "V0005",
+        "fecha": "14/09/2026",
+        "items": [
+            {
+                "codigo": "P001",
+                "cantidad": 11,
+                "precio_unitario": 3500.0,
+                "subtotal": 38500.0
+            },
+            {
+                "codigo": "P002",
+                "cantidad": 30,
+                "precio_unitario": 5000.0,
+                "subtotal": 150000.0
+            }
+        ],
+        "total": 188500.0
     }
 ]
