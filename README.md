@@ -18,7 +18,7 @@ Este proyecto permite organizar de manera sencilla la información relacionada c
 
 Toda la información se guarda automáticamente en archivos JSON, por lo que no es necesario utilizar una base de datos.
 
-## Funciones principales (hasta el momento opcion 4)
+## Funciones principales (hasta el momento opcion 6)
 
 Registrar y consultar productos.
 Controlar la cantidad disponible de cada producto.
@@ -27,6 +27,8 @@ Registrar cosechas y actualizar el inventario automáticamente.
 Registrar entradas y salidas de productos.
 Realizar ventas y generar facturas en consola.
 Guardar toda la información de forma automática para usarla en cualquier momento.
+Consultar ventas para inspeccionar el historial de "facturas" registradas en el sistema.
+Alertas de stock que esta encargado de monitorear y identificar los productos cuyo stock actual es menor o igual al limite definido.
 
 ## Tecnologías utilizadas
 

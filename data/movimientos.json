@@ -110,5 +110,21 @@
         "cantidad": 30,
         "motivo": "Venta directa en caja",
         "fecha": "14/09/2026 15:55"
+    },
+    {
+        "id": "M0015",
+        "producto_codigo": "P003",
+        "tipo": "ENTRADA",
+        "cantidad": 38,
+        "motivo": "Donacion",
+        "fecha": "14/09/2026 16:15"
+    },
+    {
+        "id": "M0016",
+        "producto_codigo": "P003",
+        "tipo": "ENTRADA",
+        "cantidad": 3000,
+        "motivo": "Compra",
+        "fecha": "14/09/2026 16:16"
     }
 ]
